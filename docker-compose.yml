@@ -7,8 +7,30 @@ services:
     container_name: fastify-docker-sequelize-api
     command: yarn start
     environment:
-      PORT: 3000
+      - PORT=3000
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=fastify_docker_sequelize_api
+      - MYSQL_USER=root
+      - MYSQLI_HOST_DB=database
+      - MYSQL_PORT=3306
+      - MYSQL_POOL_MIN=1
+      - MYSQL_POOL_MAX=5
+      - NODE_ENV=${NODE_ENV}
     ports:
       - "3000:3000"
     volumes:
       - .:/usr/app
+
+  database:
+    image: mysql:8
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --innodb-use-native-aio=0
+    restart: always
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=fastify_docker_sequelize_api
+    ports:
+      - 3308:3306
