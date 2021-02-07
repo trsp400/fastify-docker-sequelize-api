@@ -1,12 +1,14 @@
-const fastify = require("fastify")({
-  logger: {
-    level: "info",
-    serializers: {
-      req: function (req) {
-        return { url: req.url };
-      },
-    },
+const pino = require("pino");
+const logger = pino({
+  prettyPrint: {
+    colorize: true,
+    translateTime: "yyyy-mm-dd HH:MM:ss",
+    ignore: "pid,hostname",
   },
+});
+
+const fastify = require("fastify")({
+  logger,
 });
 const routes = require("../routes");
 
